@@ -1,0 +1,250 @@
+<html>
+
+<head>
+  <title>Fake Twitter</title>
+  <link href="https://fonts.googleapis.com/css?family=Righteous&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      padding-left: 25%;
+      padding-right: 25%;
+      background-color: #00acee;
+      margin: 0;
+    }
+
+    #content {
+      margin: auto;
+      min-height: 100vh;
+      background-color: white;
+      padding: 20px;
+    }
+
+    #twitter {
+      font-family: 'Righteous', 'Helvetica';
+      color: #00acee;
+      text-align: center;
+      margin: 0;
+      font-size: 4em;
+    }
+    
+    /* Form styles */
+    form {
+      width: 75%;
+      margin: auto;
+      margin-bottom: 25px;
+      text-align: center;
+    }
+
+    #fullname {
+      width: 100%;
+      margin: 5px 0px;
+    }
+
+    #comments {
+      width: 100%;
+      min-height: 150px;
+    }
+
+    #submit {
+      margin-top: 5px;
+      text-align: center;
+      color: white;
+      background-color: #00acee;
+      font-size: 1em;
+      border-radius: 5px;
+      border: none;
+    }
+
+    #submit:focus {
+      outline: none;
+    }
+
+    #submit:active {
+      border: solid 1px gray;
+    }
+
+    /* Tweets */
+    .tweetDiv {
+      width: 75%;
+      margin: 0 auto 5px;
+      border: solid 1px lightgray;
+      border-radius: 5px;
+      padding: 20px;
+    }
+
+    .nameDiv {
+      position: absolute;
+      display: inline-block;
+    }
+
+    .userDiv {
+      margin: 0 0 10px;
+      position: relative;
+    }
+
+    .userImg {
+      height: 50px;
+      width: 50px;
+      display: inline-block;
+      border-radius: 50%;
+    }
+
+    .userName,
+    .atName {
+      display: block;
+      margin: 0 20px;
+      top: 0;
+      /* position: absolute; */
+    }
+
+    .atName {
+      color: gray;
+    }
+
+    .logo {
+      position: absolute;
+      right: 0;
+      display: inline-block;
+      height: 35px;
+      width: 35px;
+    }
+
+    .commentDiv {
+      font-size: 1em;
+    }
+
+    .date {
+      color: gray;
+      font-size: 1em;
+    }
+
+    /* to top css*/
+    #toTop {
+      z-index: 1;
+      position: fixed;
+      right: 100;
+      bottom: 30;
+      margin: auto;
+      font-size: 5em;
+      color: white;
+      width: 75px;
+      text-align: center;
+    }
+  </style>
+  <script>
+    function showComment() {
+      //get the length of the comments.
+      var charLength = document.getElementById('comments').value.length;
+
+      //find the characters left by subtracting 255 - length
+      var charRemain = 255 - charLength;
+      document.getElementById('numleft').innerHTML = (charRemain);
+
+      //condition if we go over 255
+      //disable the field or just make the value equal to the first 255 characters.
+
+      // <!!! I have the disable textarea code below, I rather not use it !!!>
+
+      // if (charRemain <= 0) {
+      //   document.getElementById('comments').disabled = true;
+      // }
+    }
+
+    function tweet() {
+      // get name value from name input
+      var name = document.getElementById('fullname').value;
+      // get comment value
+      var comment = document.getElementById('comments').value;
+      // create @ name
+      var nameHolder = name.split(' ');
+      var atName = '';
+      // loop through name and combine
+      nameHolder.forEach(function(user) {
+        atName += user;
+      });
+
+      // check name is not empty
+      // check comment is not empty
+      if (name.length > 0 && comment.length > 0) {
+        // create div for tweet
+        // create variables
+        // main tweet div
+        var tweetDiv = document.createElement('div');
+        tweetDiv.setAttribute('class', 'tweetDiv')
+        // user info div (image, name, logo)
+        var userDiv = document.createElement('div');
+        userDiv.setAttribute('class', 'userDiv');
+        // user image div
+        var userImg = document.createElement('img');
+        userImg.setAttribute('src', 'https://lh3.googleusercontent.com/proxy/Q0tw6gF4VjdWHW2a9J46I14u7OqRcKD6pvujJZjW1Fa-HhFUFuaOCT2DZTbUh-rnL3qmzFGE0CFTkagD3BG1dUImSj-sea1jUGXR3LRhKCg');
+        userImg.setAttribute('class', 'userImg');
+        // user name info div (full name, @name)
+        var nameDiv = document.createElement('div');
+        nameDiv.setAttribute('class', 'nameDiv');
+        // full name div
+        var userName = document.createElement('h2');
+        userName.setAttribute('class', 'userName');
+        userName.innerHTML = name;
+        // @name div
+        var displayAtName = document.createElement('p');
+        displayAtName.setAttribute('class', 'atName');
+        displayAtName.innerHTML = ('@' + atName);
+        // logo div
+        var logo = document.createElement('img');
+        logo.setAttribute('src', 'https://rmutrecht.org/wp-content/uploads/sites/259/2017/07/logo-twitter.png');
+        logo.setAttribute('class', 'logo');
+        // display comment div
+        var commentDiv = document.createElement('div');
+        commentDiv.setAttribute('class', 'commentDiv');
+        commentDiv.innerHTML = comment;
+        // timestamp div
+        var dateDiv = document.createElement('p');
+        var date = new Date(Date.now());
+        dateDiv.innerHTML = date;
+        dateDiv.setAttribute('class', 'date');
+        
+        // append everything
+        userDiv.appendChild(userImg);
+        userDiv.appendChild(nameDiv);
+        nameDiv.appendChild(userName);
+        nameDiv.appendChild(displayAtName);
+        userDiv.appendChild(logo);
+        tweetDiv.appendChild(userDiv);
+        tweetDiv.appendChild(commentDiv);
+        tweetDiv.appendChild(dateDiv);
+        document.getElementById('tweets').insertBefore(tweetDiv, document.getElementById('tweets').firstChild);
+        // clear input
+        clearForm();
+      } else {
+        // if empty, notify user
+        window.alert('Name and comment may not be blank');
+      }
+    }
+
+    // clear input form
+    function clearForm() {
+      document.getElementById('fullname').value = '';
+      document.getElementById('comments').value = '';
+      document.getElementById('numleft').innerHTML = '255';
+    }
+  </script>
+</head>
+
+<body>
+  <div id="content">
+    <h1 id="twitter">twitter</h1>
+
+    <form action="" method="post">
+      <input type="text" name="fullname" id="fullname" placeholder="fullname"><span class="err"></span><br>
+      <div id="showcomment">You have <span id="numleft">255</span> characters of your 255 left!</div>
+      <textarea id="comments" maxlength="255" onkeyup="showComment()"></textarea>
+      <input type="button" name="submit" value="Tweet" onclick="tweet()" id="submit">
+    </form>
+
+    <div id="tweets"></div>
+
+    <a href="#twitter"><div id="toTop">^</div></a>
+  </div>
+</body>
+
+</html>
